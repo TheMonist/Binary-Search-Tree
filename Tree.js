@@ -1,5 +1,5 @@
 import Node from "./Node";
-//merge sort function
+import mergeSort from "./MergeSort";
 
 //Tree Factory
 const Tree = (inputArray) => {
@@ -17,5 +17,73 @@ const Tree = (inputArray) => {
         root.rightChild = buildTree(arr, mid - 1, end);
 
         return root
+    }
+
+    const array = [...Set(mergeSort(inputArray))]
+    let root = buildTree(array, 0, array.length - 1);
+
+    const insertVal = (val, rootNode = root) => {
+
+        //Base Case: Tree is empty
+        if(rootNode === null) {
+            rootNode = Node(val)
+            return rootNode;
+        }
+
+        if (val < rootNode) {
+            rootNode.leftChild = insertVal(val, rootNode.leftChild);
+        } else if (val > rootNode) {
+            rootNode.rightChild = insertVal(val, rootNode.rightChild);
+        }
+
+        return rootNode;
+    }
+
+    const deleteVal = (val, rootNode = root) => {
+        if (rootNode === null) return rootNode;
+        
+        if (val < rootNode.data) {
+            rootNode.leftChild = deleteVal(val, rootNode.leftChild);
+        } else if (val > rootNode.data) {
+            rootNode.rightChild = deleteVal(val, rootNode.rightChild);
+        } else {
+            if (rootNode.leftChild === null) {
+                return rootNode.rightChild;
+            } else if (rootNode.rightChild === null) {
+                return rootNode.leftChild;
+            } 
+
+            rootNode.data = minValue(rootNode.rightChild);
+            rootNode.rightChild = deleteVal(rootNode.data, rootNode.rightChild);
+        }
+
+        return rootNode;
+    }
+
+    const minValue = (root) => {
+        let minV = root.data;
+        while(root.leftChild != null) {
+            minV = root.leftChild.data;
+            root = root.leftChild;
+        }
+
+        return minV;
+    }
+
+    const find = (val, rootNode = root) => {
+        if (rootNode === null) return false;
+        if (rootNode.data === val) return rootNode;
+        if (rootNode.data > val) {
+            return find(val, rootNode.rightChild);
+        }
+
+        return rootNode;
+    }
+
+    return {
+        insertVal,
+        deleteVal,
+        minValue,
+        find,
     }
 }
