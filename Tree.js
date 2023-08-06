@@ -1,4 +1,5 @@
 import Node from "./Node";
+//merge sort function
 
 //Tree Factory
 const Tree = (inputArray) => {
