@@ -30,30 +30,39 @@ const Tree = (inputArray) => {
             return rootNode;
         }
 
+        //Going through the tree
         if (val < rootNode) {
             rootNode.leftChild = insertVal(val, rootNode.leftChild);
         } else if (val > rootNode) {
             rootNode.rightChild = insertVal(val, rootNode.rightChild);
         }
 
+        //Return unchanged root node
         return rootNode;
     }
 
     const deleteVal = (val, rootNode = root) => {
+        
+        //Base Case: Tree is empty
         if (rootNode === null) return rootNode;
         
         if (val < rootNode.data) {
             rootNode.leftChild = deleteVal(val, rootNode.leftChild);
         } else if (val > rootNode.data) {
             rootNode.rightChild = deleteVal(val, rootNode.rightChild);
-        } else {
+        }
+
+        // If val == root.data
+        else {
+            //If root has one or no child 
             if (rootNode.leftChild === null) {
                 return rootNode.rightChild;
             } else if (rootNode.rightChild === null) {
                 return rootNode.leftChild;
             } 
-
+            // For nodes with two children, find inOrder successor
             rootNode.data = minValue(rootNode.rightChild);
+            //Deleting the inOrder successor
             rootNode.rightChild = deleteVal(rootNode.data, rootNode.rightChild);
         }
 
@@ -83,7 +92,6 @@ const Tree = (inputArray) => {
     return {
         insertVal,
         deleteVal,
-        minValue,
         find,
     }
 }
