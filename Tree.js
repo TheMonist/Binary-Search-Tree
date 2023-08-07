@@ -65,7 +65,6 @@ const Tree = (inputArray) => {
             //Deleting the inOrder successor
             rootNode.rightChild = deleteVal(rootNode.data, rootNode.rightChild);
         }
-
         return rootNode;
     }
 
@@ -89,9 +88,105 @@ const Tree = (inputArray) => {
         return rootNode;
     }
 
+    //Breadth First Search
+    const levelOrder = (callback) => {
+        if (root === null) return [];
+        const queue = [root];
+        const result = []
+        while (queue.length > 0) {
+            const node = queue.shift();
+            if (node.leftChild != null) queue.push(node.leftChild);
+            if (node.rightChild != null) queue.push(node.rightChild);
+            if (callback) callback(node);
+            else result.push(node.data);
+        }
+
+        return result;
+    }
+
+    //Depth First Search
+    const preOrder = (rootNode = root, preOrderData = []) => {
+        if (rootNode === null) return [];
+        preOrderData.push(rootNode.data);
+        if (rootNode.leftChild != null) preOrder(rootNode.leftChild, preOrderData);
+        if (rootNode.rightChild != null) preOrder(rootNode.rightChild, preOrderData);
+        return preOrderData;
+    }
+
+    const inOrder = (rootNode = root, inOrderData = []) => {
+        if (rootNode === null) return [];
+        if(rootNode.leftChild != null) inOrder(rootNode.leftChild, inOrderData);
+        inOrderData.push(rootNode.data);
+        if(rootNode.rightChild != null) inOrder(rootNode.rightChild, inOrderData);
+        return inOrderData;
+    }
+
+    const postOrder = (rootNode = root, postOrderData = []) => {
+        if (rootNode === null) return [];
+        if(rootNode.leftChild != null) postOrder(rootNode.leftChild, postOrderData);
+        if(rootNode.rightChild != null) postOrder(rootNode.rightChild, postOrderData);
+        postOrderData.push(rootNode.data);
+        return postOrderData;
+    }
+
+    const height = (node) => {
+        //Base case
+        if (node === null || !node || find(node) === false) return -1;
+        return Math.max(height(node.leftChild), height(node.rightChild)) + 1;
+    }
+
+    const depth = (root, node) => {
+        let level = -1;
+        //Base case
+        if (root === null) return -1;
+        if (
+            root === null || 
+            (level = depth(root.leftChild, node)) >= 0 || 
+            (level = depth(root.rightChild, node)) >= 0
+            ) {
+            return level + 1;
+        }
+
+        return level;
+    }
+
+    const traverse = (rootNode = root, array = []) => {
+        array.push(rootNode.data);
+        if (rootNode.leftChild != null) traverse(rootNode.leftChild, array);
+        if (rootNode.rightChild != null) traverse(rootNode.rightChild, array);
+        return array;
+    }
+
+    const isBalanced = (rootNode = root) => {
+        //Base case
+        if (rootNode == null) return true;
+        if (
+            Math.abs(height(rootNode.leftChild) - height(rootNode.rightChild)) <= 1 && 
+            isBalanced(rootNode.leftChild) === true &&
+            isBalanced(rootNode.rightChild) === true
+            ) {
+                return true;
+        }
+        return false;
+    }
+
+    const reBalance = (rootNode = root) => {
+        return isBalanced(rootNode) ? rootNode : (root = Tree(traverse()).root);
+    }
+
     return {
         insertVal,
         deleteVal,
         find,
+        levelOrder,
+        preOrder,
+        inOrder,
+        postOrder,
+        height,
+        depth,
+        isBalanced,
+        reBalance,
     }
 }
+
+export default Tree;
