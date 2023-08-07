@@ -89,6 +89,7 @@ const Tree = (inputArray) => {
     }
 
     //Breadth First Search
+    //Prints node values level by level
     const levelOrder = (callback) => {
         if (root === null) return [];
         const queue = [root];
@@ -105,6 +106,7 @@ const Tree = (inputArray) => {
     }
 
     //Depth First Search
+    //Traverses tree by root -> left -> right
     const preOrder = (rootNode = root, preOrderData = []) => {
         if (rootNode === null) return [];
         preOrderData.push(rootNode.data);
@@ -113,6 +115,7 @@ const Tree = (inputArray) => {
         return preOrderData;
     }
 
+    //Traverses tree by left -> root -> right
     const inOrder = (rootNode = root, inOrderData = []) => {
         if (rootNode === null) return [];
         if(rootNode.leftChild != null) inOrder(rootNode.leftChild, inOrderData);
@@ -121,6 +124,7 @@ const Tree = (inputArray) => {
         return inOrderData;
     }
 
+    //Traverses tree by left -> right -> root
     const postOrder = (rootNode = root, postOrderData = []) => {
         if (rootNode === null) return [];
         if(rootNode.leftChild != null) postOrder(rootNode.leftChild, postOrderData);
@@ -139,11 +143,13 @@ const Tree = (inputArray) => {
         let level = -1;
         //Base case
         if (root === null) return -1;
+        //Recursively searches left and right tree for node
         if (
             root === null || 
             (level = depth(root.leftChild, node)) >= 0 || 
             (level = depth(root.rightChild, node)) >= 0
             ) {
+            //Returns depth of node
             return level + 1;
         }
 
